@@ -13,6 +13,7 @@ const getWeather = (locationName) => {
         return response.json();
     })
     .then(function(response) {
+        console.log(response)
         const weather = response.current.temp_c;
         const location = response.location.name;
         const region = response.location.region;
