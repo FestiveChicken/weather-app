@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="styles.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <label for="Name">Location Name:</label>
-    <input type="text" id="Name" name="Name">
-    <button id="submit">Submit</button>
-    <div id="displayWeather"></div>
-    <script src="main.js"> 
-    </script>
+  <div class="container">
+    <h1>Weather App</h1>
+    <input type="text" id="Name" placeholder="Enter Location">
+    <button id="submit">Get Weather</button>
+    <div id="weatherInfo">
+        <div id="dayOne">
+            <p id="dayOneDescription"></p>
+            <img id="dayOneImage">
+        </div>
+        <div id="dayTwo">
+            <p id="dayTwoDescription"></p>
+            <img id="dayTwoImage">
+        </div>
+        <div id="dayThree">
+            <p id="dayThreeDescription"></p>
+            <img id="dayThreeImage">
+        </div>
+        <div id="dayFour">
+            <p id="dayFourDescription"></p>
+            <img id="dayFourImage">
+        </div>
+        <div id="dayFive">
+            <p id="dayFiveDescription"></p>
+            <img id="dayFiveImage">
+        </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
 </body>
 </html>
