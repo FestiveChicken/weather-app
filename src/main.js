@@ -1,3 +1,6 @@
+import _ from 'lodash';
+import './style.css';
+
 const submitButton = document.getElementById('submit').addEventListener('click', () => {
     const textBox = document.getElementById('Name').value;
     setWeather(textBox);
@@ -37,7 +40,7 @@ const getCondition = async (locationName) => {
             return response.json();
         })
         .then(function (response) {
-            for (i = 0; i < 5; i++) {
+            for (let i = 0; i < 5; i++) {
                 let condition = response.forecast.forecastday[i].day.condition.text;
                 conditionsArray.push(condition)
             }
