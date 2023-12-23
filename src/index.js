@@ -27,14 +27,22 @@ for (let i = 0; i < days.length; i++) {
   const dayDiv = document.createElement('div');
   dayDiv.id = `day${days[i]}`;
 
-  const description = document.createElement('p');
-  description.id = `day${days[i]}Description`;
+  const date = document.createElement('p');
+  date.id = `day${days[i]}Date`;
+
+  const temperature = document.createElement('p');
+  temperature.id = `day${days[i]}Temperature`;
 
   const image = document.createElement('img');
   image.id = `day${days[i]}Image`;
 
-  dayDiv.appendChild(description);
+  const condition = document.createElement('p');
+  condition.id = `day${days[i]}Condition`;
+
+  dayDiv.appendChild(date);
+  dayDiv.appendChild(temperature);
   dayDiv.appendChild(image);
+  dayDiv.appendChild(condition);
   weatherInfo.appendChild(dayDiv);
 }
 
