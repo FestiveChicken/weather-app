@@ -1,39 +1,40 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+/* eslint-disable no-undef */
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  mode: 'development',
+  mode: "development",
   entry: {
-    index: './src/index.js',
-    main: './src/main.js'
+    index: "./src/index.js",
+    main: "./src/main.js",
   },
-  devtool: 'inline-source-map',
- devServer: {
-   static: './dist',
- },
+  devtool: "cheap-module-source-map",
+  devServer: {
+    static: "./dist",
+  },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Weather App',
+      title: "Weather App",
     }),
   ],
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist"),
     clean: true,
   },
- optimization: {
-   runtimeChunk: 'single',
- },
+  optimization: {
+    runtimeChunk: "single",
+  },
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ["style-loader", "css-loader"],
       },
-     {
-       test: /\.(png|svg|jpg|jpeg|gif)$/i,
-       type: 'asset/resource',
-     },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+      },
     ],
   },
 };
