@@ -13,6 +13,6 @@ To use the following project is extremely simple.
 
 
 2. And the app will tell you the weather and temperature at that place!
-3. 
+   
 Note: This API license was on a free trial so it may not work properly, as the free trial will have expired at the time you are seeing this
    
