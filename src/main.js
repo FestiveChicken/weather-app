@@ -3,42 +3,47 @@ import _ from "lodash";
 import "./style.css";
 
 // eslint-disable-next-line no-unused-vars
-const submitButton = document.getElementById("submit") 
+const submitButton = document.getElementById("submit");
 
 submitButton.addEventListener("click", () => {
-    const textBox = document.getElementById("Name").value;
-    setWeather(textBox);
-  });
+  const textBox = document.getElementById("Name").value;
+  if (!textBox.trim()) {
+    alert("Please enter a location.");
+    return;
+  }
+  setWeather(textBox);
+});
 
-//Gets temperature for the next five days
+// Gets temperature for the next five days
 const getTemperature = async (locationName) => {
   return new Promise((resolve) => {
     const temperatureArray = [];
 
     fetch(
-      "https://api.weatherapi.com/v1/forecast.json?key=9cae779d806ab550191f667e3bda78bc&q=" +
-        locationName +
-        "&days=5",
-      { mode: "cors" },
+      `https://api.weatherapi.com/v1/forecast.json?key=9cae779d806ab550191f667e3bda78bc&q=${locationName}&days=5`,
+      { mode: "cors" }
     )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (response) {
+      .then((response) => response.json())
+      .then((response) => {
+        console.log("API response (temperature):", response);
         for (let i = 0; i < 5; i++) {
-          let temperature = response.forecast.forecastday[i].day.avgtemp_c;
-          temperatureArray.push(temperature);
+          const dayData = response.forecast?.forecastday?.[i];
+          if (dayData && dayData.day) {
+            temperatureArray.push(dayData.day.avgtemp_c);
+          } else {
+            console.warn("Missing day data at index", i);
+            temperatureArray.push("N/A");
+          }
         }
         resolve(temperatureArray);
       })
-      .catch(function (error) {
-        // Handle error by displaying a message
-        console.log("Error fetching data:", error);
+      .catch((error) => {
+        console.error("Error fetching temperature data:", error);
       });
   });
 };
 
-//Gets condition, dates, and images for the next five days
+// Gets condition, dates, and images for the next five days
 const getCondition = async (locationName) => {
   return new Promise((resolve) => {
     const conditionsIconArray = [];
@@ -46,35 +51,38 @@ const getCondition = async (locationName) => {
     const dateArray = [];
 
     fetch(
-      "https://api.weatherapi.com/v1/forecast.json?key=9cae779d806ab550191f667e3bda78bc&q=" +
-        locationName +
-        "&days=5",
-      { mode: "cors" },
+      `https://api.weatherapi.com/v1/forecast.json?key=9cae779d806ab550191f667e3bda78bc&q=${locationName}&days=5`,
+      { mode: "cors" }
     )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (response) {
+      .then((response) => response.json())
+      .then((response) => {
+        console.log("API response (condition):", response);
         for (let i = 0; i < 5; i++) {
-          let conditionIcon =
-            response.forecast.forecastday[i].day.condition.icon;
-          let condition = response.forecast.forecastday[i].day.condition.text;
-          let date = response.forecast.forecastday[i].date;
+          const dayData = response.forecast?.forecastday?.[i];
+          if (dayData && dayData.day && dayData.day.condition) {
+            let conditionIcon = dayData.day.condition.icon;
+            let condition = dayData.day.condition.text;
+            let date = dayData.date;
 
-          conditionsIconArray.push(conditionIcon);
-          conditionsArray.push(condition);
-          dateArray.push(date);
+            conditionsIconArray.push(conditionIcon);
+            conditionsArray.push(condition);
+            dateArray.push(date);
+          } else {
+            console.warn("Missing condition data at index", i);
+            conditionsIconArray.push("");
+            conditionsArray.push("N/A");
+            dateArray.push("N/A");
+          }
         }
         resolve([conditionsIconArray, conditionsArray, dateArray]);
       })
-      .catch(function (error) {
-        // Handle error by displaying a message
-        console.log("Error fetching data:", error);
+      .catch((error) => {
+        console.error("Error fetching condition data:", error);
       });
   });
 };
 
-//Sets the temperature for each day
+// Sets the temperature for each day
 const setWeatherTemperature = async (locationName) => {
   try {
     const temperature = await getTemperature(locationName);
@@ -82,28 +90,28 @@ const setWeatherTemperature = async (locationName) => {
 
     for (let i = 0; i < 5; i++) {
       document.getElementById(`day${days[i]}Temperature`).textContent =
-        temperature[i] + "\u00B0 C";
+        temperature[i] !== "N/A" ? temperature[i] + "\u00B0 C" : "N/A";
     }
   } catch (error) {
-    console.log("Error fetching data:", error);
+    console.error("Error setting temperature:", error);
   }
 };
 
-//Sets the picture for each day
+// Sets the picture for each day
 const setWeatherPictures = async (locationName) => {
   try {
     const [conditionsIconArray] = await getCondition(locationName);
     const days = ["One", "Two", "Three", "Four", "Five"];
     for (let i = 0; i < 5; i++) {
       document.getElementById(`day${days[i]}Image`).src =
-        `https:` + conditionsIconArray[i];
+        conditionsIconArray[i] ? `https:${conditionsIconArray[i]}` : "";
     }
   } catch (error) {
-    console.log("Error fetching data:", error);
+    console.error("Error setting pictures:", error);
   }
 };
 
-//Describes the weather conditions
+// Describes the weather conditions
 const setWeatherCondition = async (locationName) => {
   try {
     const [, conditionsArray] = await getCondition(locationName);
@@ -113,36 +121,35 @@ const setWeatherCondition = async (locationName) => {
         conditionsArray[i];
     }
   } catch (error) {
-    console.log("Error fetching data:", error);
+    console.error("Error setting condition:", error);
   }
 };
 
-//Describes the weather conditions
+// Sets the weekday for each day
 const setWeatherDate = async (locationName) => {
   try {
     const [, , dateArray] = await getCondition(locationName);
-
     const days = ["One", "Two", "Three", "Four", "Five"];
     const weekdays = [
+      "Sunday",
       "Monday",
       "Tuesday",
       "Wednesday",
       "Thursday",
       "Friday",
       "Saturday",
-      "Sunday",
     ];
     for (let i = 0; i < 5; i++) {
       const d = new Date(dateArray[i]);
-      let day = weekdays[d.getDay()];
-      document.getElementById(`day${days[i]}Date`).textContent = day;
+      const dayName = isNaN(d.getDay()) ? "N/A" : weekdays[d.getDay()];
+      document.getElementById(`day${days[i]}Date`).textContent = dayName;
     }
   } catch (error) {
-    console.log("Error fetching data:", error);
+    console.error("Error setting date:", error);
   }
 };
 
-//Calls all the functions
+// Calls all the functions
 const setWeather = (locationName) => {
   setWeatherTemperature(locationName);
   setWeatherPictures(locationName);
