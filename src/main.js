@@ -16,7 +16,7 @@ const getTemperature = async (locationName) => {
     const temperatureArray = [];
 
     fetch(
-      "https://api.weatherapi.com/v1/forecast.json?key=302e8a0e7fec43a1b5a181824231312&q=" +
+      "https://api.weatherapi.com/v1/forecast.json?key=9cae779d806ab550191f667e3bda78bc&q=" +
         locationName +
         "&days=5",
       { mode: "cors" },
@@ -46,7 +46,7 @@ const getCondition = async (locationName) => {
     const dateArray = [];
 
     fetch(
-      "https://api.weatherapi.com/v1/forecast.json?key=302e8a0e7fec43a1b5a181824231312&q=" +
+      "https://api.weatherapi.com/v1/forecast.json?key=9cae779d806ab550191f667e3bda78bc&q=" +
         locationName +
         "&days=5",
       { mode: "cors" },
